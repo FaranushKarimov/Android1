@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.snackbar.Snackbar
 
 
 class ResetPassword : AppCompatActivity() {
@@ -25,14 +26,30 @@ class ResetPassword : AppCompatActivity() {
 
         // Обработка нажатия на кнопку confirmButton
         confirmButton.setOnClickListener {
-            // Здесь можно добавить логику обработки события нажатия на кнопку
-            // Создаем интент для перехода на новую активность
+            val newPassword = newPasswordEditText.text.toString()
+            val confirmPassword = confirmPasswordEditText.text.toString()
+
+            if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
+                // Один из полей пуст, выводим сообщение об ошибке
+                // Можно использовать Snackbar или Toast для отображения сообщения
+                // Например:
+                Snackbar.make(it, "Пожалуйста, заполните все поля", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (newPassword != confirmPassword) {
+                // Пароли не совпадают, выводим сообщение об ошибке
+                // Например:
+                Snackbar.make(it, "Пароли не совпадают", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Если код дошел до этой точки, значит пароли совпадают
+            // и можно продолжить выполнение нужных действий, например, переход на другую активность
             val intent = Intent(this, MainActivity::class.java)
-
-
-            // Запускаем новую активность
             startActivity(intent)
         }
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
